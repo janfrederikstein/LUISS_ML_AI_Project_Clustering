@@ -196,6 +196,25 @@ The final method testes was the Gaussian Mixture. This method clusters based on 
 
 ### Experimental Design
 
+#### Comparison between methods
+
+To decide which method that is best for our data and objective we compare the best clusterings from each method.
+
+Comparing and evaluating clustering methods is a difficult task to perform, especially when there is no ground truth to compare the results to. If we had, we could as well use a supervised classification algorithm to predict the value. As we have discussed before, there are metrics available to evaluate clustering outputs, like silhouette score. However, these often don't work well in practice where shapes might be complex. Even if our silhouette score indicates a well formed cluster, it might lack semantic meaning and reflection of aspects that are interesting for us. This leaves room for our subjective opinion looking at the visual representation, this is possible as we only use two features.
+
+Despite high silhuette scores, we have decided to disregard segmentations with fewer than 3 clusters as we don't recognize any semantic meaning in these and they don't reflect our intention of properly creating actionable customer segments that can be used targeted advertisement and marketing campaigns. This eliminates:
+- DBSCAN
+- Gaussian Mixture with n=2
+- Agglomerative/Hierarchical Clustering with n=2
+
+leaving us with 3 remaining options:
+- KMeans
+- Agglomerative/Hierarchical Clustering with n=5
+- Gaussian Mixture with n=5
+
+We see issues with Gaussian Mixture n=5 both when it comes to the split cluster around (-0.5,0), and because of the vertical size of the right cluster, stretching from very low to very high monthly paid, essentially not discriminating between largely different customers.
+
+Comparing the last 2 options, we prefer KMeans as it has a more semantically logical divide between spending habits and item cost, as well as a more diagonal split between high spending and high item cost customers.
 
 
 ### Results
