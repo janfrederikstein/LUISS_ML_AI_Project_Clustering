@@ -133,9 +133,14 @@ As a part of the univariate analysis with the main purpose of describing and fin
 Analyzing the relationship between two variables using pairplots and correlation heatmap.
 
 - Using a pairplot for our numerical variables, we can get to know more about how our variables are related to each other and if we can find patterns. Even though the outliers make it difficult, we find some interesting patterns, 
-- With the correlation heatmap, we can analyze the correlation between our variables. When facing a clustering problem, it is important to understand the correlation as it can influence the formation of clusters for some algorithms (e.g., KMeans). A high correlation suggests a linear relationship.
+- With the correlation heatmap, we can analyze the correlation between our variables. When facing a clustering problem, it is important to understand the correlation as it can influence the formation of clusters for some algorithms (e.g., KMeans). A high correlation suggests a linear relationship. In our case, most of the variables have a relatively low correlation and it is therefore not a big concern for this project.
 
 **EDA Conclusion**
+
+After our extensive EDA, we decided to create clusters based on the features **MonthlyPaid** and **avgItemCost**. There are several reasons for this. These varaibles give us information about both how much money the customer spends on average and what type of price range the customer buys from. Even though the average item cost does not give us all the information about the actual price of all items bought by the customer, it acts as a good proxy for that.  
+We believe that this segmentation approach to identify clusters where ShopEasy can offer advertising of relevant price ranges to different segments and offer different discounts depending on how much the customer spends, as two examples.
+
+#### Preprocessing
 
 
 
