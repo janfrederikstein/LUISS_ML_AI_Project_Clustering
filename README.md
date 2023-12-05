@@ -176,7 +176,7 @@ Kmeans clusters data by trying to separate samples in groups of equal variance, 
 The method requires the user to decide the number of clusters as input before running the model. A helpful method to decide the best number of n is the `the elbow method`. By calculating the inertia for every number of n within a range and plotting the result in a line chart, you can find the point ('the elbow') where the model no longer returns a significantly lower inertia with one extra cluster.
 
 In our model however, the elbow was not as clear as in other datasets. We decided to test another mettric, the `Silhouette Score`. It measures how similar an object is to its own cluster and compared to other clusters. Ranging from -1 to +1, a score close to +1 indicates that points are well clustered, a score close to 0 indicates that the clusters are overlapping and a score close to -1 indicates that data points have been assigned to the wrong cluster.
-While the silhouette score
+While the silhouette score.
 
 
 ### Experimental Design
