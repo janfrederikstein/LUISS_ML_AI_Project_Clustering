@@ -132,7 +132,7 @@ As a part of the univariate analysis with the main purpose of describing and fin
 
 Analyzing the relationship between two variables using pairplots and correlation heatmap.
 
-- Using a pairplot for our numerical variables, we can get to know more about how our variables are related to each other and if we can find patterns. Even though the outliers make it difficult, we find some interesting patterns, 
+- Using a pairplot for our numerical variables, we can get to know more about how our variables are related to each other and if we can find patterns. Even though the outliers make it difficult, we find some interesting patterns. There are also some expected patterns where we for example see a positive relationship between item count and item cost, which makes much sense as purchasing more items often costs more money than purchasing less items.
 - With the correlation heatmap, we can analyze the correlation between our variables. When facing a clustering problem, it is important to understand the correlation as it can influence the formation of clusters for some algorithms (e.g., KMeans). A high correlation suggests a linear relationship. In our case, most of the variables have a relatively low correlation and it is therefore not a big concern for this project.
 
 **EDA Conclusion**
@@ -181,7 +181,20 @@ While the silhouette score might show a higher value for a certain number of clu
 **Hierarchical Clsutering**
 
 This method uses a bottom up approach where each observations starts in its own cluster and then the closest clusters merge, one step at a time until only one clusters remain. There are several possible distance metrics, we decided to use `Ward` which is similar to KMeans for trying to minimize the variance within all clusters but with an agglomerative hierarchical approach.  
-The best number of clusters can be analyzed using a `Dendogram` for a tree representation where the vertical distance represents the 
+The best number of clusters can be analyzed using a `Dendogram` for a tree representation where the vertical distance represents the what is called the `Linkage`. Where the linkage is the largest, is where the method merges the two furthest apart clusters.  
+
+In our case, the highest linkage is between two and three clusters, indicating that two clusters is a good fit. However, similar to KMeans, it does not really make any semantic sense and we should consider other options. Looking at the visual respresentation, five clusters is another good option and we will continue with the two and five cluster options to the next step, but first we will have a look at the next method.
+
+**DBSCAN**
+
+This method does not require the user to set the number of clusters *a priori* and no random seeds are involved. DBSCAN works with every shape, it does not assume a convex shape as KMeans for example. Moreover, it handles outliers well and excludes points not belonging to a nearby cluster. The central concept of this method is the `Core sample`, which are samples in areas of high density.   
+DBSCAN uses two key inputs, the `minimum number of samples` and `eps` which defines how many points required to be within a certain distance for qualifying as being a core sample.
+
+We tried combinations of eps between 0.05-0.15 and n_samples of 10-30. The output for the lower number of samples created several small clusters that don't make much sense while the larger number mainly creates few large clusters without clear features of the segment. We decided to continue with an eps of 0.15 and n_samples of 20.
+
+**Gaussian Mixture**
+
+The final method testes was the Gaussian Mixture. This method clusters based on a Gaussian distribution of, in our case two, included features. The clustering results from this method reveals som problems with this method in combination with our dense dataset. We can see it for five clusters where one cluster for the same value on the y-axis is both on the left and right side of two other clusters, and the silhouette score supports our observation. However, we keep the results for two and five clusters for comparison between methods in the next section.
 
 
 ### Experimental Design
