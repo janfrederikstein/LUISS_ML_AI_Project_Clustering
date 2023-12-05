@@ -81,7 +81,7 @@ Therefore, and because of the size of the dataset, we have chosen to eliminate f
 
 **Columns to be cut**
 
-1. **paymentCompletionRate:** because it is a payment option related variable
+1. **paymentCompletionRate:** because it is a payment option related feature
 2. **maxSpendLimit:** because it is already represented through spending, which is represented in monthly paid
 3. **emergencyCount:** because it just reflects the customers preferred payment option, which is irrelevant for this investigation
 4. **emergencyUseFrequency:** because of the same reason
@@ -90,7 +90,7 @@ Therefore, and because of the size of the dataset, we have chosen to eliminate f
 7. **MultipleItemCosts:** because they are only related to payment option
 8. **singleItemBuyFrequency:** because they are only related to payment option
 9. **multipleItemBuyFrequency:** because they are only related to payment option
-10. **personId:** This variable is just an internal customer ID and does not matter for our purposes
+10. **personId:** This feature is just an internal customer ID and does not matter for our purposes
 
 **Descriptive Statistics**
 
@@ -107,13 +107,13 @@ From our base set of 8 950 rows, we identified some columns (`AccountTotal, Item
 
 **Feature Engineering**
 
-The dataset includes features for total amount of money spent (accountTotal), total amount of items purchased (itemCount), total cost of those items (itemCosts) and an average monthly spending variable (monthlyPaid). It does however not include a variable for the average item cost.
+The dataset includes features for total amount of money spent (accountTotal), total amount of items purchased (itemCount), total cost of those items (itemCosts) and an average monthly spending feature (monthlyPaid). It does however not include a feature for the average item cost.
 
-We add a variable for average item cost (`avgItemCost`) by dividing the itemCosts by itemCount.
+We add a feature for average item cost (`avgItemCost`) by dividing the itemCosts by itemCount.
 
 **Analyzing Outliers**
 
-We analyzed outliers in the dataset using a `boxplot`. Most columns have many distant outliers except the frequency features created by ShopEasy, which make sense as they are a relative range variable between 0-1 or 0-100. Valuable information for later steps.
+We analyzed outliers in the dataset using a `boxplot`. Most columns have many distant outliers except the frequency features created by ShopEasy, which make sense as they are a relative range feature between 0-1 or 0-100. Valuable information for later steps.
 
 Numerical outlier boxplot
 ![Alt text](images/outlier_boxplot.png)
@@ -127,9 +127,9 @@ Categorical countplot
 
 **Analyzing Numerical Features**
 
-As a part of the univariate analysis with the main purpose of describing and finding patterns for one variable, we used histograms to analyze the distribution of all remaining numerical features, here are some findings:
+As a part of the univariate analysis with the main purpose of describing and finding patterns for one feature, we used histograms to analyze the distribution of all remaining numerical features, here are some findings:
 
-- `accountLifespan:` has the same value for >90% of the dataset. We suspect that this category is simply all accounts that have a lifespan of 12+ months, regardless of how much above 12 months they are in age. We have decided not to use this variable due to it being essentially the same value for almost all rows.
+- `accountLifespan:` has the same value for >90% of the dataset. We suspect that this category is simply all accounts that have a lifespan of 12+ months, regardless of how much above 12 months they are in age. We have decided not to use this feature due to it being essentially the same value for almost all rows.
 
 - `itemBuyFrequency:` This doesn't seem to be a univariate index. While we know it's a value between 0 and 1, even by removing rows we would not expect this type of skewed distribution favoring the maximal index point. We would expect it to look more like the `webUsage Distribution` chart.
 
@@ -252,6 +252,11 @@ Silhouette score
 ![Alt text](images/gaussian_silhouette.png)
 
 
+#### 2.5 Environment Description
+
+To find a full description of the environment used, please see the appendix at the end of this file.
+
+
 ### 3. Experimental Design
 
 #### 3.1 Comparison between methods
@@ -284,7 +289,7 @@ Comparing the last 2 options, we prefer KMeans as it has a more semantically log
 
 To get a better understanding for the properties and attributes of the segments created in our clustering methods, we do some brief investigation with classification algorithms to determine if there are any common denominators apart from the buying behaviour of our segments.
 
-We add a new column to the already scaled and processed dataset that reflects the assigned cluster with an integer value (0-4). The variables that were used to create the clustering are removed to not leak information into the model, otherwise we would end up with a perfect prediction.
+We add a new column to the already scaled and processed dataset that reflects the assigned cluster with an integer value (0-4). The features that were used to create the clustering are removed to not leak information into the model, otherwise we would end up with a perfect prediction.
 
 We use two different classification models:
 - Decision Tree
@@ -316,11 +321,11 @@ The occasional splurgers can be a difficult group to provide with relevant conte
 
 The last group, the big spenders, tend to buy a lot of products within the relatively cheap price range but there can also be cases where they buy some expensive products and many cheaper products. We know that they have money to spend and we should make our biggest effort for this group.
 
-#### 4.2 Placeholder for supervised comment
+#### 4.2 Main Result from Classification
 
 ![Alt text](images/decision_tree_feature_importance.png)
 
-It would be a stretch to call the results from our classification models anything less than disappointing. Even after tuning, the decision tree approach barely cracked 60% accuracy, not significantly better than flipping a coin. And even our attempts to improve performance with a less interpretable but more powerful model like ANN was nothing less than a failure. Additionally, since our budget-conscious cluster holds approximately half of the customers with around average or less buying behaviour, the models barely cracked the stupidest possible approach of taking the average.
+While a glimpse at the feature importance graph above gives the appearance of some insights, it would be a stretch to call the results from our classification models anything less than severely disappointing. Even after tuning, the decision tree approach barely cracked 60% accuracy, not significantly better than flipping a coin. And even our attempts to improve performance with a less interpretable but more powerful model like ANN was nothing less than a failure. Additionally, since our budget-conscious cluster holds approximately half of the customers with around average or less buying behaviour, the models barely cracked the stupidest possible approach of taking the average.
 
 It seems that whilst the clusters quite clearly separate customers when it comes to buying behaviour, the attributes outside of this category overlap too much to make it possible to predict the appropriate clusters on them (at least with the information used in our model). 
 
@@ -329,3 +334,311 @@ This in itself however is an interesting finding, as it suggests that similar bu
 
 ### 5. Conclusions
 
+The main take-away from this investigation is that it is possible to properly cluster customers into segments based on their buying behaviour using the average cost of the items that they buy in combination with the average amount of money that they spend per month. ShopEasy can use the 5 identified clusters to tailor their campaigns and marketing efforts appropriately to both the value of a customers spending, as well as by catering towards the typical price range of items purchased by the customers. These clusters can also prove valuable when deciding which type of content to show to customers in webshop settings by increasing the likelihood of customers being shown items and promotions that they are actually interested in buying, thus representing a value proposition for the company.
+
+What has become abundantly clear from our classification efforts, is that there seems to be a large overlap between segments when it comes to other factors, not directly related to the identified features for spending habits. In essence, while customers can be divided into clusters after making purchases, the company might be interested in predicting early which type of cluster a customer will eventually belong to, to maximize the lifetime value potential from them. This will however require additional information about the customers, potentially more demographic features could be promising, if they can be obtained. Also, whilst our investigation discusses the average cost of items, it does not cover topics such as product categories, which could be way more influential in customer buying behaviour. A good next step would probably be to dig deeper into the exact items purchased by customers and trying to segment on these type of categories, potentially in combination with the value-oriented segments we have identified. It is essental to understand, that a customers purchasing choices are not only determined by the price of an item, but rather by the customers actual interest in the item. This dimension is omitted entirely from this dataset, and could be one of the leading causes why predicting cluster identify is difficult.
+
+
+
+
+## Appendix: Environment Description
+
+# Name                    Version                   Build  Channel
+_tflow_select             2.2.0                     eigen  
+abseil-cpp                20211102.0           hc377ac9_0  
+absl-py                   1.4.0           py311hca03da5_0  
+aiofiles                  22.1.0          py311hca03da5_0  
+aiohttp                   3.8.5           py311h80987f9_0  
+aiosignal                 1.2.0              pyhd3eb1b0_0  
+aiosqlite                 0.18.0          py311hca03da5_0  
+anyio                     3.5.0           py311hca03da5_0  
+appnope                   0.1.2           py311hca03da5_1001  
+argon2-cffi               21.3.0             pyhd3eb1b0_0  
+argon2-cffi-bindings      21.2.0          py311h80987f9_0  
+asttokens                 2.0.5              pyhd3eb1b0_0  
+astunparse                1.6.3                      py_0  
+async-timeout             4.0.2           py311hca03da5_0  
+attrs                     23.1.0          py311hca03da5_0  
+babel                     2.11.0          py311hca03da5_0  
+backcall                  0.2.0              pyhd3eb1b0_0  
+beautifulsoup4            4.12.2          py311hca03da5_0  
+blas                      1.0                    openblas  
+bleach                    4.1.0              pyhd3eb1b0_0  
+blinker                   1.6.2           py311hca03da5_0  
+boost-cpp                 1.73.0              h1a28f6b_12  
+bottleneck                1.3.5           py311ha0d4635_0  
+brotli                    1.0.9                h1a28f6b_7  
+brotli-bin                1.0.9                h1a28f6b_7  
+brotlipy                  0.7.0           py311h80987f9_1002  
+bzip2                     1.0.8                h620ffc9_4  
+c-ares                    1.19.1               h80987f9_0  
+ca-certificates           2023.08.22           hca03da5_0  
+cachetools                4.2.2              pyhd3eb1b0_0  
+cairo                     1.16.0               h302bd0f_5  
+catalogue                 2.0.7           py311hca03da5_0  
+certifi                   2023.11.17      py311hca03da5_0  
+cffi                      1.15.1          py311h80987f9_3  
+charset-normalizer        2.0.4              pyhd3eb1b0_0  
+click                     8.0.4           py311hca03da5_0  
+colorama                  0.4.6           py311hca03da5_0  
+comm                      0.1.2           py311hca03da5_0  
+confection                0.0.4           py311hb6e6a13_0  
+contourpy                 1.0.5           py311h48ca7d4_0  
+cryptography              41.0.3          py311h3c57c4d_0  
+cycler                    0.11.0             pyhd3eb1b0_0  
+cymem                     2.0.6           py311h313beb8_0  
+cyrus-sasl                2.1.28               h458e800_1  
+cython-blis               0.7.9           py311hb9f6ed7_0  
+debugpy                   1.6.7           py311h313beb8_0  
+decorator                 5.1.1              pyhd3eb1b0_0  
+defusedxml                0.7.1              pyhd3eb1b0_0  
+dnspython                 2.4.2                    pypi_0    pypi
+en-core-web-sm            3.5.0                    pypi_0    pypi
+entrypoints               0.4             py311hca03da5_0  
+executing                 0.8.3              pyhd3eb1b0_0  
+expat                     2.5.0                h313beb8_0  
+flatbuffers               2.0.0                hc377ac9_0  
+font-ttf-dejavu-sans-mono 2.37                 hd3eb1b0_0  
+font-ttf-inconsolata      2.001                hcb22688_0  
+font-ttf-source-code-pro  2.030                hd3eb1b0_0  
+font-ttf-ubuntu           0.83                 h8b1ccd4_0  
+fontconfig                2.14.1               hee714a5_2  
+fonts-anaconda            1                    h8fa9717_0  
+fonts-conda-ecosystem     1                    hd3eb1b0_0  
+fonttools                 4.25.0             pyhd3eb1b0_0  
+freetype                  2.12.1               h1192e45_0  
+fribidi                   1.0.10               h1a28f6b_0  
+frozenlist                1.3.3           py311h80987f9_0  
+gast                      0.4.0              pyhd3eb1b0_0  
+gdk-pixbuf                2.42.10              h80987f9_0  
+gettext                   0.21.0               h13f89a0_1  
+giflib                    5.2.1                h80987f9_3  
+glib                      2.69.1               h514c7bf_2  
+google-auth               2.22.0          py311hca03da5_0  
+google-auth-oauthlib      0.5.2           py311hca03da5_0  
+google-pasta              0.2.0              pyhd3eb1b0_0  
+graphite2                 1.3.14               hc377ac9_1  
+graphviz                  2.50.0               hf331ead_1  
+grpc-cpp                  1.48.2               h877324c_0  
+grpcio                    1.48.2          py311h877324c_0  
+gst-plugins-base          1.14.1               h313beb8_1  
+gstreamer                 1.14.1               h80987f9_1  
+gts                       0.7.6                hde733a8_3  
+h5py                      3.9.0           py311hba6ad2f_0  
+harfbuzz                  4.3.0                he9eebac_1  
+hdf5                      1.12.1               h160e8cb_2  
+icu                       68.1                 hc377ac9_0  
+idna                      3.4             py311hca03da5_0  
+imageio                   2.31.4          py311hca03da5_0  
+ipykernel                 6.25.0          py311hb6e6a13_0  
+ipython                   8.15.0          py311hca03da5_0  
+ipython_genutils          0.2.0              pyhd3eb1b0_1  
+ipywidgets                8.0.4           py311hca03da5_0  
+jax                       0.4.21                   pypi_0    pypi
+jedi                      0.18.1          py311hca03da5_1  
+jinja2                    3.1.2           py311hca03da5_0  
+joblib                    1.2.0           py311hca03da5_0  
+jpeg                      9e                   h80987f9_1  
+json5                     0.9.6              pyhd3eb1b0_0  
+jsonschema                4.17.3          py311hca03da5_0  
+jupyter                   1.0.0           py311hca03da5_8  
+jupyter_client            7.4.9           py311hca03da5_0  
+jupyter_console           6.6.3           py311hca03da5_0  
+jupyter_core              5.3.0           py311hca03da5_0  
+jupyter_events            0.6.3           py311hca03da5_0  
+jupyter_server            1.23.4          py311hca03da5_0  
+jupyter_server_fileid     0.9.0           py311hca03da5_0  
+jupyter_server_ydoc       0.8.0           py311hca03da5_1  
+jupyter_ydoc              0.2.4           py311hca03da5_0  
+jupyterlab                3.6.3           py311hca03da5_0  
+jupyterlab_pygments       0.1.2                      py_0  
+jupyterlab_server         2.22.0          py311hca03da5_0  
+jupyterlab_widgets        3.0.5           py311hca03da5_0  
+keras                     2.12.0          py311hca03da5_0  
+keras-preprocessing       1.1.2              pyhd3eb1b0_0  
+kiwisolver                1.4.4           py311h313beb8_0  
+krb5                      1.20.1               h8380606_1  
+langcodes                 3.3.0              pyhd3eb1b0_0  
+lcms2                     2.12                 hba8e193_0  
+lerc                      3.0                  hc377ac9_0  
+libboost                  1.73.0              h49e8a49_12  
+libbrotlicommon           1.0.9                h1a28f6b_7  
+libbrotlidec              1.0.9                h1a28f6b_7  
+libbrotlienc              1.0.9                h1a28f6b_7  
+libclang                  16.0.6                   pypi_0    pypi
+libclang13                14.0.6          default_h24352ff_1  
+libcurl                   8.2.1                h0f1d93c_0  
+libcxx                    14.0.6               h848a8c0_0  
+libdeflate                1.17                 h80987f9_1  
+libedit                   3.1.20221030         h80987f9_0  
+libev                     4.33                 h1a28f6b_1  
+libffi                    3.4.4                hca03da5_0  
+libgd                     2.3.3                h14f8a72_1  
+libgfortran               5.0.0           11_3_0_hca03da5_28  
+libgfortran5              11.3.0              h009349e_28  
+libiconv                  1.16                 h1a28f6b_2  
+libllvm14                 14.0.6               h7ec7a93_3  
+libnghttp2                1.52.0               h10c0552_1  
+libopenblas               0.3.21               h269037a_0  
+libpng                    1.6.39               h80987f9_0  
+libpq                     12.15                h449679c_1  
+libprotobuf               3.20.3               h514c7bf_0  
+librsvg                   2.54.4               hb3bd4c3_3  
+libsodium                 1.0.18               h1a28f6b_0  
+libssh2                   1.10.0               h449679c_2  
+libtiff                   4.5.1                h313beb8_0  
+libtool                   2.4.6             h313beb8_1009  
+libwebp                   1.3.2                ha3663a8_0  
+libwebp-base              1.3.2                h80987f9_0  
+libxml2                   2.10.4               h372ba2a_0  
+libxslt                   1.1.37               habca612_0  
+llvm-openmp               14.0.6               hc6e5704_0  
+lxml                      4.9.3           py311h50ffb84_0  
+lz4-c                     1.9.4                h313beb8_0  
+markdown                  3.4.1           py311hca03da5_0  
+markupsafe                2.1.1           py311h80987f9_0  
+matplotlib                3.7.2           py311hca03da5_0  
+matplotlib-base           3.7.2           py311h7aedaa7_0  
+matplotlib-inline         0.1.6           py311hca03da5_0  
+matplotlib-venn           0.11.9                   pypi_0    pypi
+mistune                   0.8.4           py311h80987f9_1000  
+ml-dtypes                 0.3.1                    pypi_0    pypi
+multidict                 6.0.2           py311h80987f9_0  
+munkres                   1.1.4                      py_0  
+murmurhash                1.0.7           py311h313beb8_0  
+mysql                     5.7.24               he1ceea5_2  
+mysql-connector-python    8.1.0                    pypi_0    pypi
+nbclassic                 0.5.5           py311hca03da5_0  
+nbclient                  0.5.13          py311hca03da5_0  
+nbconvert                 6.5.4           py311hca03da5_0  
+nbformat                  5.9.2           py311hca03da5_0  
+ncurses                   6.4                  h313beb8_0  
+nest-asyncio              1.5.6           py311hca03da5_0  
+nltk                      3.8.1           py311hca03da5_0  
+notebook                  6.5.4           py311hca03da5_1  
+notebook-shim             0.2.2           py311hca03da5_0  
+nspr                      4.35                 h313beb8_0  
+nss                       3.89.1               h313beb8_0  
+numexpr                   2.8.7           py311h6dc990b_0  
+numpy                     1.23.5          py311hb2c0538_0  
+numpy-base                1.23.5          py311h9eb1c70_0  
+oauthlib                  3.2.2           py311hca03da5_0  
+openjpeg                  2.3.0                h7a6adac_2  
+openssl                   1.1.1w               h1a28f6b_0  
+opt_einsum                3.3.0              pyhd3eb1b0_1  
+packaging                 23.1            py311hca03da5_0  
+pandas                    2.0.3           py311h7aedaa7_0  
+pandocfilters             1.5.0              pyhd3eb1b0_0  
+pango                     1.50.7               h7271ec9_0  
+parso                     0.8.3              pyhd3eb1b0_0  
+pathy                     0.10.1          py311hca03da5_0  
+pcre                      8.45                 hc377ac9_0  
+pexpect                   4.8.0              pyhd3eb1b0_3  
+pickleshare               0.7.5           pyhd3eb1b0_1003  
+pillow                    10.0.1          py311h3b245a6_0  
+pip                       23.2.1          py311hca03da5_0  
+pixman                    0.40.0               h1a28f6b_0  
+platformdirs              3.10.0          py311hca03da5_0  
+ply                       3.11            py311hca03da5_0  
+poppler                   22.12.0              h52f4003_3  
+poppler-data              0.4.11               hca03da5_1  
+preshed                   3.0.6           py311h313beb8_0  
+prometheus_client         0.14.1          py311hca03da5_0  
+prompt-toolkit            3.0.36          py311hca03da5_0  
+prompt_toolkit            3.0.36               hd3eb1b0_0  
+protobuf                  4.21.12                  pypi_0    pypi
+psutil                    5.9.0           py311h80987f9_0  
+ptyprocess                0.7.0              pyhd3eb1b0_2  
+pure_eval                 0.2.2              pyhd3eb1b0_0  
+pyasn1                    0.4.8              pyhd3eb1b0_0  
+pyasn1-modules            0.2.8                      py_0  
+pycparser                 2.21               pyhd3eb1b0_0  
+pydantic                  1.10.12         py311h80987f9_1  
+pydot                     1.4.2                    pypi_0    pypi
+pygments                  2.15.1          py311hca03da5_1  
+pyjwt                     2.4.0           py311hca03da5_0  
+pymongo                   4.6.1                    pypi_0    pypi
+pyopenssl                 23.2.0          py311hca03da5_0  
+pyparsing                 3.0.9           py311hca03da5_0  
+pyqt                      5.15.7          py311h313beb8_0  
+pyqt5-sip                 12.11.0         py311h313beb8_0  
+pyrsistent                0.18.0          py311h80987f9_0  
+pysocks                   1.7.1           py311hca03da5_0  
+python                    3.11.5               hc0d8a6c_0  
+python-dateutil           2.8.2              pyhd3eb1b0_0  
+python-fastjsonschema     2.16.2          py311hca03da5_0  
+python-flatbuffers        2.0                pyhd3eb1b0_0  
+python-graphviz           0.20.1          py311hca03da5_0  
+python-json-logger        2.0.7           py311hca03da5_0  
+python-tzdata             2023.3             pyhd3eb1b0_0  
+pytz                      2023.3.post1    py311hca03da5_0  
+pyyaml                    6.0             py311h80987f9_1  
+pyzmq                     23.2.0          py311h313beb8_0  
+qt-main                   5.15.2               h8c8f68c_9  
+qt-webengine              5.15.9               h2903aaf_7  
+qtconsole                 5.4.2           py311hca03da5_0  
+qtpy                      2.2.0           py311hca03da5_0  
+qtwebkit                  5.212                h19f419d_5  
+re2                       2022.04.01           hc377ac9_0  
+readline                  8.2                  h1a28f6b_0  
+regex                     2023.10.3       py311h80987f9_0  
+requests                  2.31.0          py311hca03da5_0  
+requests-oauthlib         1.3.0                      py_0  
+rfc3339-validator         0.1.4           py311hca03da5_0  
+rfc3986-validator         0.1.1           py311hca03da5_0  
+rsa                       4.7.2              pyhd3eb1b0_1  
+scikit-learn              1.3.2                    pypi_0    pypi
+scipy                     1.11.3          py311hc76d9b0_0  
+seaborn                   0.12.2          py311hca03da5_0  
+send2trash                1.8.0              pyhd3eb1b0_1  
+setuptools                68.0.0          py311hca03da5_0  
+shellingham               1.5.0           py311hca03da5_0  
+sip                       6.6.2           py311h313beb8_0  
+six                       1.16.0             pyhd3eb1b0_1  
+smart_open                5.2.1           py311hca03da5_0  
+snappy                    1.1.9                hc377ac9_0  
+sniffio                   1.2.0           py311hca03da5_1  
+soupsieve                 2.5             py311hca03da5_0  
+spacy                     3.5.3           py311h30ceab6_0  
+spacy-legacy              3.0.12          py311hca03da5_0  
+spacy-loggers             1.0.4           py311hca03da5_0  
+sqlite                    3.41.2               h80987f9_0  
+srsly                     2.4.6           py311h313beb8_0  
+stack_data                0.2.0              pyhd3eb1b0_0  
+tensorboard               2.12.1          py311hca03da5_0  
+tensorboard-data-server   0.7.0           py311ha6e5c4f_0  
+tensorboard-plugin-wit    1.8.1           py311hca03da5_0  
+tensorflow                2.12.0          eigen_py311h689d69b_0  
+tensorflow-base           2.12.0          eigen_py311h0a52ebb_0  
+tensorflow-estimator      2.12.0          py311hca03da5_0  
+termcolor                 2.1.0           py311hca03da5_0  
+terminado                 0.17.1          py311hca03da5_0  
+thinc                     8.1.10          py311h30ceab6_0  
+threadpoolctl             2.2.0              pyh0d69192_0  
+tinycss2                  1.2.1           py311hca03da5_0  
+tk                        8.6.12               hb8d0fd4_0  
+toml                      0.10.2             pyhd3eb1b0_0  
+tornado                   6.3.3           py311h80987f9_0  
+tqdm                      4.65.0          py311hb6e6a13_0  
+traitlets                 5.7.1           py311hca03da5_0  
+typer                     0.4.1           py311hca03da5_0  
+typing-extensions         4.7.1           py311hca03da5_0  
+typing_extensions         4.7.1           py311hca03da5_0  
+tzdata                    2023c                h04d1e81_0  
+urllib3                   1.26.16         py311hca03da5_0  
+wasabi                    0.9.1           py311hca03da5_0  
+wcwidth                   0.2.5              pyhd3eb1b0_0  
+webencodings              0.5.1           py311hca03da5_1  
+websocket-client          0.58.0          py311hca03da5_4  
+werkzeug                  2.2.3           py311hca03da5_0  
+wheel                     0.35.1             pyhd3eb1b0_0  
+widgetsnbextension        4.0.5           py311hca03da5_0  
+wrapt                     1.14.1          py311h80987f9_0  
+xz                        5.4.2                h80987f9_0  
+y-py                      0.5.9           py311ha6e5c4f_0  
+yaml                      0.2.5                h1a28f6b_0  
+yarl                      1.8.1           py311h80987f9_0  
+ypy-websocket             0.8.2           py311hca03da5_0  
+zeromq                    4.3.4                hc377ac9_0  
+zlib                      1.2.13               h5a0b063_0  
+zstd                      1.5.5                hd90d995_0  
