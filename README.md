@@ -187,7 +187,7 @@ In our case, the highest linkage is between two and three clusters, indicating t
 This method does not require the user to set the number of clusters *a priori* and no random seeds are involved. DBSCAN works with every shape, it does not assume a convex shape as KMeans for example. Moreover, it handles outliers well and excludes points not belonging to a nearby cluster. The central concept of this method is the `Core sample`, which are samples in areas of high density.   
 DBSCAN uses two key inputs, the `minimum number of samples` and `eps` which defines how many points required to be within a certain distance for qualifying as being a core sample.
 
-We tried combinations of eps between 0.05-0.15 and n_samples of 10-30. The output for the lower number of samples created several small clusters that don't make much sense while the larger number mainly creates few large clusters without clear features of the segment. We decided to continue with an eps of 0.15 and n_samples of 20.
+We tried combinations of eps between 0.05-0.15 and n_samples of 10-30. Higher eps creates larger dense clusters and some smaller more 'random' clusters while larger n_samples generates larger and fewer clusters, therefore we stayed within these ranges. The output for the lower number of samples created several small clusters that don't make much sense while the larger number mainly creates few large clusters without clear features of the segment. We decided to continue with an eps of 0.15 and n_samples of 20.
 
 **Gaussian Mixture**
 
@@ -216,7 +216,7 @@ We see issues with Gaussian Mixture n=5 both when it comes to the split cluster 
 
 Comparing the last 2 options, we prefer KMeans as it has a more semantically logical divide between spending habits and item cost, as well as a more diagonal split between high spending and high item cost customers.
 
-#### Supervised model to predict segment
+#### Supervised Model to Predict Segment
 
 
 ### Results
