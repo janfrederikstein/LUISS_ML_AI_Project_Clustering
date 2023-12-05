@@ -115,11 +115,15 @@ We add a variable for average item cost (`avgItemCost`) by dividing the itemCost
 
 We analyzed outliers in the dataset using a `boxplot`. Most columns have many distant outliers except the frequency features created by ShopEasy, which make sense as they are a relative range variable between 0-1 or 0-100. Valuable information for later steps.
 
+Numerical outlier boxplot
 ![Alt text](images/outlier_boxplot.png)
 
 **Analyzing Categorical Features**
 
 Both categorical features consists of three evenly distributed values. `Location` (New York, Los Angeles and Chicago) and `AccountType` (Premium, Student and Standard).
+
+Categorical countplot
+![Alt text](images/categorical_countplot.png)
 
 **Analyzing Numerical Features**
 
@@ -129,12 +133,23 @@ As a part of the univariate analysis with the main purpose of describing and fin
 
 - `itemBuyFrequency:` This doesn't seem to be a univariate index. While we know it's a value between 0 and 1, even by removing rows we would not expect this type of skewed distribution favoring the maximal index point. We would expect it to look more like the `webUsage Distribution` chart.
 
+Univariate histplot
+![Alt text](images/univariate_histplot.png)
+
 **Bivariate Analysis**
 
 Analyzing the relationship between two features using pairplots and correlation heatmap.
 
 - Using a `pairplot` for our numerical features, we can get to know more about how our features are related to each other and if we can find patterns. Even though the outliers make it difficult, we find some interesting patterns. There are also some expected patterns where we for example see a positive relationship between item count and item cost, which makes much sense as purchasing more items often costs more money than purchasing less items.
+
+
+Pairplot
+![Alt text](images/pairplots.png)
+
 - With the `correlation heatmap`, we can analyze the correlation between our features. When facing a clustering problem, it is important to understand the correlation as it can influence the formation of clusters for some algorithms (e.g., KMeans). A high correlation suggests a linear relationship. In our case, most of the features have a relatively low correlation and it is therefore not a big concern for this project.
+
+Correlation heatmap
+![Alt text](images/corr_heatmap.png)
 
 **EDA Conclusion**
 
@@ -145,11 +160,11 @@ We believe that this segmentation approach to identify clusters where ShopEasy c
 
 **Encode Categorical features**
 
-We used the `get_dummies` from pandas on our categorical features **location** and **accountType**. 
+We used the `get_dummies` from pandas on our categorical features `location` and `accountType`. 
 
 **Scale numerical values**
 
-`StandardScaler` is a preprocessing technique used in machine learning and statistics. It standardizes the features of a dataset by removing the mean and scaling each feature to unit variance. This process can be crucial for the performance of many algorithms, especially those that are sensitive to the scale of features.  
+`StandardScaler` is a preprocessing technique used in machine learning and statistics. It standardizes the features of a dataset by removing the mean and dividing by the standard deviation, thus scaling each feature to unit variance. This process can be crucial for the performance of many algorithms, especially those that are sensitive to the scale of features.  
 It is important to scale the data to ensure equalizing the importance of features, dealing with different units of measurement enhance interpretability.
 
 **Type of problem & concerns with data distribution**
@@ -158,7 +173,10 @@ To analyze the buying behavior, we are specifically interested in the features *
 
 In order to better analyze the relationship of the larger customer group, we removed customers where these values are above 3 standard deviations in either or both of these values. Customers who end up in these extreme localities will instead be offered special services from a Customer Relations manager on an individual basis because it is difficult to generalize from outliers and their existence could seriously hamper the functionality of algorithms used to analyze the dataset. We removed 221 customers (3.3%)
 
-We are left with a much more manageable dataset that is starting to show some patterns. Just from looking at it, we can see that while the majority of customers are centered around the mean 0 (as expected), there seems to be a considerable distinction between customers who have high monthly spending because of expensive items, and customers who buy expensive items but a lot less frequently. The distribution of remaining data points can be seen in `plot x`.
+We are left with a much more manageable dataset that is starting to show some patterns. Just from looking at it, we can see that while the majority of customers are centered around the mean 0 (as expected), there seems to be a considerable distinction between customers who have high monthly spending because of expensive items, and customers who buy expensive items but a lot less frequently. The distribution of remaining data points can be seen in this plot.
+
+Scatterplot
+![Alt text](images/2variable_distribution_scatterplot.png)
 
 #### 2.4 Clustering Algorithms
 
@@ -179,12 +197,17 @@ The method requires the user to decide the number of clusters as input before ru
 In our model however, the elbow was not as clear as we would prefer. We decided to test another metric, the `Silhouette Score`. It measures how similar an object is to its own cluster and compared to other clusters. Ranging from -1 to +1, a score close to +1 indicates that points are well clustered, a score close to 0 indicates that the clusters are overlapping and a score close to -1 indicates that data points have been assigned to the wrong cluster.  
 While the silhouette score might show a higher value for a certain number of clusters, it does not automatically mean that there is any semantic meaning in the clustering or whether the clustering reflects any relevant aspect for our data and objective. In clustering, there is not always an objective best clustering solution and in this case, we combined inertia, silhouette score and our own subjective visual inspection to decide that five clusters was the best solution for our case.
 
-**Hierarchical Clustering**
+'Elbow method'
+![Alt text](images/kmeans_elbow.png)
 
-This method uses a bottom-up approach where each observations starts in its own cluster and then the closest clusters merge, one step at a time until only one clusters remain. There are several possible distance metrics, we decided to use `Ward` which is similar to KMeans for trying to minimize the variance within all clusters but with an agglomerative hierarchical approach.  
-The best number of clusters can be analyzed using a `Dendogram` for a tree representation where the vertical distance represents what is called the `Linkage`. Where the linkage is the largest, is where the method merges the two furthest apart clusters.  
+Cluster subplots
+![Alt text](images/kmeans_subplots.png)
 
-In our case, the highest linkage is between two and three clusters, indicating that two clusters are a good fit. However, similar to KMeans, it does not really make any semantic sense and we should consider other options. Looking at the visual representation, five clusters is another good option and we will continue with the two and five cluster options to the next step, but first we will have a look at the next method.
+Silhouette score
+![Alt text](images/kmeans_silhouette.png)
+
+Best cluster
+![Alt text](images/kmeans_cluster_winner.png)
 
 **DBSCAN**
 
@@ -193,9 +216,40 @@ DBSCAN uses two key inputs, the `minimum number of samples` and `eps` which defi
 
 We tried combinations of eps between 0.05-0.15 and n_samples of 10-30. Higher eps creates larger dense clusters and some smaller more 'random' clusters while larger n_samples generates larger and fewer clusters, therefore we stayed within these ranges. The output for the lower number of samples created several small clusters that don't make much sense while the larger number mainly creates few large clusters without clear features of the segment. We decided to continue with an eps of 0.15 and n_samples of 20.
 
+Cluster subplots
+![Alt text](images/dbscan_subplots.png)
+
+Silhouette score
+![Alt text](images/dbscan_silhouette.png)
+
+**Hierarchical Clustering**
+
+This method uses a bottom-up approach where each observations starts in its own cluster and then the closest clusters merge, one step at a time until only one clusters remain. There are several possible distance metrics, we decided to use `Ward` which is similar to KMeans for trying to minimize the variance within all clusters but with an agglomerative hierarchical approach.  
+The best number of clusters can be analyzed using a `Dendogram` for a tree representation where the vertical distance represents what is called the `Linkage`. Where the linkage is the largest, is where the method merges the two furthest apart clusters.  
+
+In our case, the highest linkage is between two and three clusters, indicating that two clusters are a good fit. However, similar to KMeans, it does not really make any semantic sense and we should consider other options. Looking at the visual representation, five clusters is another good option and we will continue with the two and five cluster options to the next step, but first we will have a look at the next method.
+
+Dendogram
+![Alt text](images/hierarchical_dendogram.png)
+
+Linkage for last steps
+![Alt text](images/hierarchical_dendogram_steps.png)
+
+Cluster subplots
+![Alt text](images/hierarchical_subplots.png)
+
+Silhouette score
+![Alt text](images/hierarchical_silhouette.png)
+
 **Gaussian Mixture**
 
 The final tested method was the Gaussian Mixture. This method clusters based on a Gaussian distribution of, in our case two, included features. The clustering results from this method reveals some problems with this method in combination with our dense dataset. We can see it for five clusters where one cluster for the same value on the y-axis is both on the left and right side of two other clusters, and the silhouette score supports our observation. However, we keep the results for two and five clusters for comparison between methods in the next section.
+
+Cluster subplots
+![Alt text](images/gaussian_subplots.png)
+
+Silhouette score
+![Alt text](images/gaussian_silhouette.png)
 
 
 ### 3. Experimental Design
@@ -205,6 +259,12 @@ The final tested method was the Gaussian Mixture. This method clusters based on 
 To decide which method that is best for our data and objective we compare the best clustering from each method.
 
 Comparing and evaluating clustering methods is a difficult task to perform, especially when there is no ground truth to compare the results to. If we had, we could as well use a supervised classification algorithm to predict the value. As we have discussed before, there are metrics available to evaluate clustering outputs, like silhouette score. However, these often don't work well in practice where shapes might be complex. Even if our silhouette score indicates a well-formed cluster, it might lack semantic meaning and reflection of aspects that are interesting for us. This leaves room for our subjective opinion looking at the visual representation, this is possible as we only use two features.
+
+Cluster subplots
+![Alt text](images/cluster_comparison_subplots.png)
+
+Silhouette score comparison
+![Alt text](images/silhouette_comparison.png)
 
 Despite high silhouette scores, we have decided to disregard segmentations with fewer than 3 clusters as we don't recognize any semantic meaning in these and they don't reflect our intention of properly creating actionable customer segments that can be used targeted advertisement and marketing campaigns. This eliminates:
 - DBSCAN
@@ -257,6 +317,8 @@ The occasional splurgers can be a difficult group to provide with relevant conte
 The last group, the big spenders, tend to buy a lot of products within the relatively cheap price range but there can also be cases where they buy some expensive products and many cheaper products. We know that they have money to spend and we should make our biggest effort for this group.
 
 #### 4.2 Placeholder for supervised comment
+
+![Alt text](images/decision_tree_feature_importance.png)
 
 It would be a stretch to call the results from our classification models anything less than disappointing. Even after tuning, the decision tree approach barely cracked 60% accuracy, not significantly better than flipping a coin. And even our attempts to improve performance with a less interpretable but more powerful model like ANN was nothing less than a failure. Additionally, since our budget-conscious cluster holds approximately half of the customers with around average or less buying behaviour, the models barely cracked the stupidest possible approach of taking the average.
 
