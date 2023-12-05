@@ -16,15 +16,15 @@ To successfully carry out the task at hand, the following steps were performed:
 - Description of results
 
 We identified two key variables for our segmentation:  
-- **Monthly Paid** - average amount spent on ShopEasy per month
-- **Average Item Cost** - average price of items purchased by the customer
+- `Monthly Paid` - average amount spent on ShopEasy per month
+- `Average Item Cost` - average price of items purchased by the customer
 
 Our best clustering model returned the following five segments:
-- **Segment 1** - description
-- **Segment 2** - description
-- **Segment 3** - description
-- **Segment 4** - description
-- **Segment 5** - description
+- `Segment 1` - description
+- `Segment 2` - description
+- `Segment 3` - description
+- `Segment 4` - description
+- `Segment 5` - description
 
 ### Methods
 
@@ -43,9 +43,6 @@ Our best clustering model returned the following five segments:
     - GaussianMixture
 
 - Scipy - for calculation and visualization of hierarchical clustering.
-
-    - Dendogram
-    - Linkage
 
 #### EDA
 
@@ -97,47 +94,47 @@ Therefore, and because of the size of the dataset, we have chosen to eliminate v
 
 We used the following methods to learn more about the data:
 
--Describe() method - to get more information about range of values, mean, standard deviatio, number of observations and distribution.
-- Info() method - to get a concise summary of the DataFrame. This method is useful for quickly understanding the structure of the dataset. Using info(), you can quickly assess which columns may require type conversion or additional preprocessing due to null values or incorrect data types.
-- IsNull().sum() method - The isnull().sum() method is a two-step operation specifically geared towards identifying missing values in the DataFrame. This method is particularly useful for data cleaning and preprocessing, as handling missing values is a critical step in preparing data for analysis or modeling.
+- `Describe() method` - to get more information about range of values, mean, standard deviatio, number of observations and distribution.
+- `Info() method` - to get a concise summary of the DataFrame. This method is useful for quickly understanding the structure of the dataset. Using info(), you can quickly assess which columns may require type conversion or additional preprocessing due to null values or incorrect data types.
+- `IsNull().sum() method` - The isnull().sum() method is a two-step operation specifically geared towards identifying missing values in the DataFrame. This method is particularly useful for data cleaning and preprocessing, as handling missing values is a critical step in preparing data for analysis or modeling.
 
 **Actions**
 
-From our base set of 8 950 rows, we identified some columns (AccountTotal, ItemCost, ItemCount, MonthlyPaid) with minimum values of 0 where we believe that the value should be > 0 to be relevant data points. We therefore decided to drop these rows, 2 258 dropped rows.  
-32 missing values where found for leastAmountPaid and they were also dropped. 6 660 rows remain, 74.4% of the original data.
+From our base set of 8 950 rows, we identified some columns (`AccountTotal, ItemCost, ItemCount, MonthlyPaid`) with minimum values of 0 where we believe that the value should be > 0 to be relevant data points. We therefore decided to drop these rows, 2 258 dropped rows.  
+32 missing values were found for leastAmountPaid and they were also dropped. 6 660 rows remain, 74.4% of the original data.
 
 **Feature Engineering**
 
 The dataset includes variables for total amount of money spent (accountTotal), total amount of items purchased (itemCount), total cost of those items (itemCosts) and an average monthly spending variable (monthlyPaid). It does however not include a variable for the average item cost.
 
-We add a variable for average item cost (**avgItemCost**) by dividing the itemCosts by itemCount.
+We add a variable for average item cost (`avgItemCost`) by dividing the itemCosts by itemCount.
 
 **Analyzing Outliers**
 
-We analyzed outliers in the dataset using a boxplot. Most columns have many distant outliers except the frequency variables created by ShopEasy, which make sense as they are a relative range variable between 0-1 or 0-100. Valuable information for later steps.
+We analyzed outliers in the dataset using a `boxplot`. Most columns have many distant outliers except the frequency variables created by ShopEasy, which make sense as they are a relative range variable between 0-1 or 0-100. Valuable information for later steps.
 
 **Analyzing Categorical Variables**
 
-Both categorical variables consists of three evenly distributed values. Location (New York, Los Angeles and Chicago) and AccountType (Premium, Student and Standard).
+Both categorical variables consists of three evenly distributed values. `Location` (New York, Los Angeles and Chicago) and `AccountType` (Premium, Student and Standard).
 
 **Analyzing Numerical Features**
 
 As a part of the univariate analysis with the main purpose of describing and finding patterns for one variable, we used histograms to analyze the distribution of all remaining numerical features, here are some findings:
 
-- **accountLifespan:** has the same value for >90% of the datasaet. We suspect that this category is simply all accounts that have a lifespan of 12+ months, regardless of how much above 12 months they are in age. We have decided not to use this variable due to it being essentially the same value for almost all rows.
+- `accountLifespan:` has the same value for >90% of the datasaet. We suspect that this category is simply all accounts that have a lifespan of 12+ months, regardless of how much above 12 months they are in age. We have decided not to use this variable due to it being essentially the same value for almost all rows.
 
-- **itemBuyFrequency:** This doesn't seem to be a univariate index. While we know it's a value between 0 and 1, even by removing rows we would not expect this type of skewed distribution favoring the maximal index point. We would expect it to look more like the **webUsage Distribution** chart.
+- `itemBuyFrequency:` This doesn't seem to be a univariate index. While we know it's a value between 0 and 1, even by removing rows we would not expect this type of skewed distribution favoring the maximal index point. We would expect it to look more like the `webUsage Distribution` chart.
 
 **Bivariate Analysis**
 
 Analyzing the relationship between two variables using pairplots and correlation heatmap.
 
-- Using a pairplot for our numerical variables, we can get to know more about how our variables are related to each other and if we can find patterns. Even though the outliers make it difficult, we find some interesting patterns. There are also some expected patterns where we for example see a positive relationship between item count and item cost, which makes much sense as purchasing more items often costs more money than purchasing less items.
-- With the correlation heatmap, we can analyze the correlation between our variables. When facing a clustering problem, it is important to understand the correlation as it can influence the formation of clusters for some algorithms (e.g., KMeans). A high correlation suggests a linear relationship. In our case, most of the variables have a relatively low correlation and it is therefore not a big concern for this project.
+- Using a `pairplot` for our numerical variables, we can get to know more about how our variables are related to each other and if we can find patterns. Even though the outliers make it difficult, we find some interesting patterns. There are also some expected patterns where we for example see a positive relationship between item count and item cost, which makes much sense as purchasing more items often costs more money than purchasing less items.
+- With the `correlation heatmap`, we can analyze the correlation between our variables. When facing a clustering problem, it is important to understand the correlation as it can influence the formation of clusters for some algorithms (e.g., KMeans). A high correlation suggests a linear relationship. In our case, most of the variables have a relatively low correlation and it is therefore not a big concern for this project.
 
 **EDA Conclusion**
 
-After our extensive EDA, we decided to create clusters based on the features **MonthlyPaid** and **avgItemCost**. There are several reasons for this. These varaibles give us information about both how much money the customer spends on average and what type of price range the customer buys from. Even though the average item cost does not give us all the information about the actual price of all items bought by the customer, it acts as a good proxy for that.  
+After our extensive EDA, we decided to create clusters based on the features `MonthlyPaid` and `avgItemCost`. There are several reasons for this. These varaibles give us information about both how much money the customer spends on average and what type of price range the customer buys from. Even though the average item cost does not give us all the information about the actual price of all items bought by the customer, it acts as a good proxy for that.  
 We believe that this segmentation approach to identify clusters where ShopEasy can offer advertising of relevant price ranges to different segments and offer different discounts depending on how much the customer spends, as two examples.
 
 #### Preprocessing
