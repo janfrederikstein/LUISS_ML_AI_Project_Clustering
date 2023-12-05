@@ -218,6 +218,17 @@ Comparing the last 2 options, we prefer KMeans as it has a more semantically log
 
 #### 3.2 Supervised Model to Predict Segment
 
+To get a better understanding for the properties and attributes of the segments created in our clustering methods, we do some brief investigation with classification algorithms to determine if there are any common denominators apart from the buying behaviour of our segments.
+
+We add a new column to the already scaled and processed dataset that reflects the assigned cluster with an integer value (0-4). The variables that were used to create the clustering are removed to not leak information into the model, otherwise we would end up with a perfect prediction.
+
+We use two different classification models:
+- Decision Tree
+- Artificial Neural Network
+
+The primary objective of the decision tree model is to assist with determining feature importance due to the inherently high interpretability of decision trees. A GridSearchCV is subsequently used to improve model performance through tuning of hyperparameters.
+
+An ANN is subsequently used in an attempt to maximize model performance on the available data. Various setups (2-8 hidden layers with 8-50 neurons per layer, 20-200 epochs, relu/sigmoid activation) were investigated in an attempt to minimize overfitting whilst maximizing generalization and accuracy on the test set.
 
 ### 4. Results
 
@@ -242,6 +253,13 @@ The occasional splurgers can be a difficult group to provide with relevant conte
 The last group, the big spenders, tend to buy a lot of products within the relatively cheap price range but there can also be cases where they buy some expensive products and many cheaper products. We know that they have money to spend and we should make our biggest effort for this group.
 
 #### 4.2 Placeholder for supervised comment
+
+It would be a stretch to call the results from our classification models anything less than disappointing. Even after tuning, the decision tree approach barely cracked 60% accuracy, not significantly better than flipping a coin. And even our attempts to improve performance with a less interpretable but more powerful model like ANN was nothing less than a failure. Additionally, since our budget-conscious cluster holds approximately half of the customers with around average or less buying behaviour, the models barely cracked the stupidest possible approach of taking the average.
+
+It seems that whilst the clusters quite clearly separate customers when it comes to buying behaviour, the attributes outside of this category overlap too much to make it possible to predict the appropriate clusters on them (at least with the information used in our model). 
+
+This in itself however is an interesting finding, as it suggests that similar buying behaviour can arise in vastly different customer patterns. In order to better describe the customers in the clusters, one would likely need access to more informative attributes about demographics.
+
 
 ### 5. Conclusions
 
