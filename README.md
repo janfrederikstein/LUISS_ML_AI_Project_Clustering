@@ -13,6 +13,7 @@ To successfully carry out the task at hand, the following steps were performed:
 - Preprocessing of data
 - Testing different clustering models and tuning
 - Comparison and evaluation between different clustering models
+Supervised classification model for analysis of common attributes within clusters
 - Description of results
 
 We identified two key features for our segmentation:  
@@ -20,20 +21,20 @@ We identified two key features for our segmentation:
 - `Average Item Cost` - average price of items purchased by the customer
 
 Our best clustering model returned the following five segments:
-- `Segment 1` - description
-- `Segment 2` - description
-- `Segment 3` - description
-- `Segment 4` - description
-- `Segment 5` - description
+1. `Budget-Conscious` (bottom lower left corner)
+2. `Regular Buyers` (above budget-conscious on the y-axis)
+3. `Mid-Range Shoppers` (middle on the x-axis, ~0.0-1.0)
+4. `Occasional Splurgers` (bottom right on the x-axis)
+5. `Big Spenders` (top left on the y-axis)
 
 ### 2. Methods
 
 #### 2.1 Imported Libraries
-- Pandas - powerful and flexible library for data manipulation, analysis and working with dataFrames.
-- Seaborn - great for statistical graphics.
-- Numpy - library for large arrays and.matrices and mathematical operations for these.
-- Matplotlib - great for data visualizations
-- Scikit learn - great library for preprocessing and machine learning algorithms.
+- `Pandas` - powerful and flexible library for data manipulation, analysis and working with dataFrames.
+- `Seaborn` - great for statistical graphics.
+- `Numpy` - library for large arrays and.matrices and mathematical operations for these.
+- `Matplotlib` - great for data visualizations
+- `Scikit learn` - great library for preprocessing and machine learning algorithms.
 
     - StandardScaler
     - KMeans
@@ -42,7 +43,8 @@ Our best clustering model returned the following five segments:
     - AgglomerativeClustering
     - GaussianMixture
 
-- Scipy - for calculation and visualization of hierarchical clustering.
+- `Scipy` - for calculation and visualization of hierarchical clustering.
+- `TensorFlow` - for creating artificial neural network.
 
 #### 2.2 EDA
 
@@ -98,7 +100,7 @@ We used the following methods to learn more about the data:
 - `Info() method` - to get a concise summary of the DataFrame. This method is useful for quickly understanding the structure of the dataset. Using info(), you can quickly assess which columns may require type conversion or additional preprocessing due to null values or incorrect data types.
 - `IsNull().sum() method` - The isnull().sum() method is a two-step operation specifically geared towards identifying missing values in the DataFrame. This method is particularly useful for data cleaning and preprocessing, as handling missing values is a critical step in preparing data for analysis or modeling.
 
-**Removal of Rows**
+**Data Removal**
 
 From our base set of 8 950 rows, we identified some columns (`AccountTotal, ItemCost, ItemCount, MonthlyPaid`) with minimum values of 0 where we believe that the value should be > 0 to be relevant data points. We therefore decided to drop these rows, 2 258 dropped rows.  
 32 missing values were found for leastAmountPaid and they were also dropped. 6 660 rows remain, 74.4% of the original data.
@@ -112,6 +114,8 @@ We add a variable for average item cost (`avgItemCost`) by dividing the itemCost
 **Analyzing Outliers**
 
 We analyzed outliers in the dataset using a `boxplot`. Most columns have many distant outliers except the frequency features created by ShopEasy, which make sense as they are a relative range variable between 0-1 or 0-100. Valuable information for later steps.
+
+![Alt text](images/outlier_boxplot.png)
 
 **Analyzing Categorical Features**
 
