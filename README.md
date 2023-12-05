@@ -142,7 +142,41 @@ We believe that this segmentation approach to identify clusters where ShopEasy c
 
 #### Preprocessing
 
+**Encode Categorical Variables**
 
+We used the `get_dummies` from pandas on our categorical features **location** and **accountType**. 
+
+**Scale numerical values**
+
+`StandardScaler` is a preprocessing technique used in machine learning and statistics. It standardizes the features of a dataset by removing the mean and scaling each feature to unit variance. This process can be crucial for the performance of many algorithms, especially those that are sensitive to the scale of features.  
+It is important to scale the data to ensure equalizing the importance of features, dealing with different units of measurement enhance interpretability.
+
+**Type of problem & concerns with data distribution**
+
+To analyse the buying behaviour, we are specifically interested in the variables **'monthlyPaid'** and **'avgItemCost'**. However, these include extreme outliers, as can be seen both in the outlier plots earlier in our EDA, as well as in the difference between the 75% and max columns in the .describe() method used above.
+
+In order to better analyse the relationship of the larger customer group, we removed customers where these values are above 3 standard deviations in either or both of these values. Customers who end up in these extreme localities will instead be offered special services from a Customer Relations manager on an individual basis because it is difficult to generalize from outliers and their existence could seriously hamper the functionality of algorithms used to analyse the dataset. We removed 221 customers (3.3%)
+
+We are left with a much more managable dataset that is starting to show some patterns. Just from looking at it, we can see that while the majority of customers are centered around the mean 0 (as expected), there seems to be a considerable distinction between customers who have high monthly spending because of expensive items, and customers who buy expensive items but a lot less frequently. The distribution of remaining data points can be seen in `plot x`.
+
+#### Clustering Algorithms
+
+We decided to try the following four clustering methods:
+
+- KMeans++
+- Hierarchical clustering
+- DBSCAN
+- Gaussian Mixture
+
+They vary in input parameters, scalability, usecases and distance metric used. Our goal was to find the best clustering method and hyperparameter tuning for our dataset and objective. We provide more details of every method below.
+
+**KMeans++**
+
+Kmeans clusters data by trying to separate samples in groups of equal variance, minimizing the `inertia` which is the average distance between all points of a cluster and its centroid, summed for all clusters. The basic version of KMeans is highly dependent on the random initialization of centroids, which may lead to the model returning a local minimum. The ++ method solves the problem by initializing the centroids far from each other.  
+The method requires the user to decide the number of clusters as input before running the model. A helpful method to decide the best number of n is the `the elbow method`. By calculating the inertia for every number of n within a range and plotting the result in a line chart, you can find the point ('the elbow') where the model no longer returns a significantly lower inertia with one extra cluster.
+
+In our model however, the elbow was not as clear as in other datasets. We decided to test another mettric, the `Silhouette Score`. It measures how similar an object is to its own cluster and compared to other clusters. Ranging from -1 to +1, a score close to +1 indicates that points are well clustered, a score close to 0 indicates that the clusters are overlapping and a score close to -1 indicates that data points have been assigned to the wrong cluster.
+While the silhouette score
 
 
 ### Experimental Design
