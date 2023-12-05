@@ -1,8 +1,8 @@
-# ML_Project
+# Artificial Intelligence & Machine Learning Project
 
 ### AI &amp; Machine Learning group project at LUISS Fall 2023
 
-###### Philip Fabrelius & Jan Stein
+##### Philip Fabrelius & Jan Stein
 
 ### 1. Introduction
  
@@ -28,23 +28,23 @@ Our best clustering model returned the following five segments:
 
 ### 2. Methods
 
-#### Imported Libraries
-- Pandas
-- Seaborn
-- Numpy
-- Matplotlib
+#### 2.1 Imported Libraries
+- Pandas - powerful and flexible library for data manipulation, analysis and working with dataFrames.
+- Seaborn - great for statistical graphics.
+- Numpy - library for large arrays and.matrices and mathematical operations for these.
+- Matplotlib - great for data visualizations
 - Scikit learn - great library for preprocessing and machine learning algorithms.
 
     - StandardScaler
     - KMeans
-    - silhouette_score
+    - Silhouette_score
     - DBSCAN
     - AgglomerativeClustering
     - GaussianMixture
 
 - Scipy - for calculation and visualization of hierarchical clustering.
 
-#### EDA
+#### 2.2 EDA
 
 **Description of the Dataset**  
 We assume all costs and other features related to money presented as number of dollars.
@@ -137,7 +137,7 @@ Analyzing the relationship between two features using pairplots and correlation 
 After our extensive EDA, we decided to create clusters based on the features `MonthlyPaid` and `avgItemCost`. There are several reasons for this. These features give us information about both how much money the customer spends on average and what type of price range the customer buys from. Even though the average item cost does not give us all the information about the actual price of all items bought by the customer, it acts as a good proxy for that.  
 We believe that this segmentation approach to identify clusters where ShopEasy can offer advertising of relevant price ranges to different segments and offer different discounts depending on how much the customer spends, as two examples.
 
-#### Preprocessing
+#### 2.3 Preprocessing
 
 **Encode Categorical features**
 
@@ -156,7 +156,7 @@ In order to better analyze the relationship of the larger customer group, we rem
 
 We are left with a much more manageable dataset that is starting to show some patterns. Just from looking at it, we can see that while the majority of customers are centered around the mean 0 (as expected), there seems to be a considerable distinction between customers who have high monthly spending because of expensive items, and customers who buy expensive items but a lot less frequently. The distribution of remaining data points can be seen in `plot x`.
 
-#### Clustering Algorithms
+#### 2.4 Clustering Algorithms
 
 We decided to try the following four clustering methods:
 
@@ -196,7 +196,7 @@ The final tested method was the Gaussian Mixture. This method clusters based on 
 
 ### 3. Experimental Design
 
-#### Comparison between methods
+#### 3.1 Comparison between methods
 
 To decide which method that is best for our data and objective we compare the best clustering from each method.
 
@@ -216,10 +216,12 @@ We see issues with Gaussian Mixture n=5 both when it comes to the split cluster 
 
 Comparing the last 2 options, we prefer KMeans as it has a more semantically logical divide between spending habits and item cost, as well as a more diagonal split between high spending and high item cost customers.
 
-#### Supervised Model to Predict Segment
+#### 3.2 Supervised Model to Predict Segment
 
 
 ### 4. Results
+
+#### 4.1 Main Result from Clustering
 
 Our final result from our KMeans++ method is illustrated in `figure X` and includes the following five clusters:
 
@@ -239,6 +241,7 @@ The occasional splurgers can be a difficult group to provide with relevant conte
 
 The last group, the big spenders, tend to buy a lot of products within the relatively cheap price range but there can also be cases where they buy some expensive products and many cheaper products. We know that they have money to spend and we should make our biggest effort for this group.
 
-**Placeholder for supervised comment**
+#### 4.2 Placeholder for supervised comment
 
 ### 5. Conclusions
+
