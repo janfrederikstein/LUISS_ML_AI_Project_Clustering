@@ -316,8 +316,9 @@ The occasional splurgers can be a difficult group to provide with relevant conte
 
 The last group, the big spenders, tend to buy a lot of products within the relatively cheap price range but there can also be cases where they buy some expensive products and many cheaper products. We know that they have money to spend and we should make our biggest effort for this group.
 
-#### 4.2 Placeholder for supervised comment
+#### 4.2 Main Result from Classification
 
+Feature importance decision tree
 ![Alt text](images/decision_tree_feature_importance.png)
 
 It would be a stretch to call the results from our classification models anything less than disappointing. Even after tuning, the decision tree approach barely cracked 60% accuracy, not significantly better than flipping a coin. And even our attempts to improve performance with a less interpretable but more powerful model like ANN was nothing less than a failure. Additionally, since our budget-conscious cluster holds approximately half of the customers with around average or less buying behaviour, the models barely cracked the stupidest possible approach of taking the average.
