@@ -323,6 +323,7 @@ The last group, the big spenders, tend to buy a lot of products within the relat
 
 #### 4.2 Main Result from Classification
 
+Feature importance decision tree
 ![Alt text](images/decision_tree_feature_importance.png)
 
 While a glimpse at the feature importance graph above gives the appearance of some insights, it would be a stretch to call the results from our classification models anything less than severely disappointing. Even after tuning, the decision tree approach barely cracked 60% accuracy, not significantly better than flipping a coin. And even our attempts to improve performance with a less interpretable but more powerful model like ANN was nothing less than a failure. Additionally, since our budget-conscious cluster holds approximately half of the customers with around average or less buying behaviour, the models barely cracked the stupidest possible approach of taking the average.
