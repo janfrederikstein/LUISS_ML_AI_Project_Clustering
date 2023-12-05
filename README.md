@@ -261,7 +261,7 @@ To find a full description of the environment used, please see the appendix at t
 
 #### 3.1 Comparison between methods
 
-To decide which method that is best for our data and objective we compare the best clustering from each method.
+To decide which method that is best for our data and objective we compare the best clustering from each method. We have decided to disregard the time it takes to run the models as a performance metric, as all of the clustering methods used have negligible run times that do not affect our choice.
 
 Comparing and evaluating clustering methods is a difficult task to perform, especially when there is no ground truth to compare the results to. If we had, we could as well use a supervised classification algorithm to predict the value. As we have discussed before, there are metrics available to evaluate clustering outputs, like silhouette score. However, these often don't work well in practice where shapes might be complex. Even if our silhouette score indicates a well-formed cluster, it might lack semantic meaning and reflection of aspects that are interesting for us. This leaves room for our subjective opinion looking at the visual representation, this is possible as we only use two features.
 
